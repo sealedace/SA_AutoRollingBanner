@@ -3,7 +3,7 @@ Pod::Spec.new do |s|
   s.version          = "0.1.0"
   s.summary          = "A banner view which scrolls automatically."
   s.description      = <<-DESC
-                        A banner view which scrolls automatically. 
+                        A banner view which scrolls automatically like taobao headline. 
                        DESC
   s.homepage         = "https://github.com/sealedace/SA_AutoRollingBanner"
   s.license          = 'MIT'
