@@ -181,9 +181,13 @@
     
     self.transitionView.hidden = YES;
     
-    [self.transitionView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [self.reusableViews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     
     self.numberOfItems = [self.dataSource sa_numberOfItemsForBanner:self];
+    
+    if (self.numberOfItems == 0) {
+        return;
+    }
     
     UIView *currentView = [self getViewFromDataSourceAtIndex:self.currentIndex];
     
