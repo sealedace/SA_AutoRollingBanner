@@ -15,6 +15,7 @@
 @property (strong, nonatomic) UIView *transitionView;
 @property (nonatomic) NSUInteger currentIndex;
 @property (unsafe_unretained, nonatomic) UIView *nextView;
+@property (nonatomic) BOOL isRolling;
 
 @end
 
@@ -96,12 +97,15 @@
 
 #pragma mark - Private
 - (void)_initialization {
+    self.isRolling = NO;
     self.rollingAnimationDuration = 0.3f;
     self.rollingInterval = 3.f;
     self.clipsToBounds = YES;
 }
 
 - (void)_animate {
+    self.isRolling = YES;
+    
     // Remove all subviews
     [self.transitionView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     
@@ -150,6 +154,10 @@
 
 #pragma mark - CAAnimationDelegate
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
+    if (!flag && !self.isRolling) {
+        return;
+    }
+    
     self.currentIndex = [self nextIndex];
     
     self.nextView.frame = self.bounds;
@@ -161,6 +169,7 @@
 
 #pragma mark - Public
 - (__kindof UIView * _Nullable)dequeueReusableView {
+    
     __block UIView *view = nil;
     [self.reusableViews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if (!obj.superview) {
@@ -173,6 +182,7 @@
 }
 
 - (void)reloadData {
+    
     if (!self.dataSource) {
         return;
     }
@@ -201,6 +211,7 @@
 }
 
 - (void)stopRolling {
+    self.isRolling = NO;
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(_animate) object:nil];
 }
 
